@@ -1,7 +1,4 @@
 # .gitignore, files to not be tracked
 
-# Given values to read in
-givens*.txt
-
 # Executable files
 *.exe
