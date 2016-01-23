@@ -361,3 +361,46 @@ bool Sudoku::notCheck()
 	return isNumAdded;
 }
 
+Sudoku::Space::Space(){
+	val_ = -32768;
+}
+
+Sudoku::Space::~Space(){}
+
+bool Sudoku::Space::isSet(){
+	return (val_ > 0);
+}
+
+bool Sudoku::Space::setVal(short setVal){
+	if(1 <= setVal && setVal <= 9){
+		val_ = setVal;
+		return true;
+	}
+	return false;
+}
+
+short Sudoku::Space::getVal(){
+	if(val_ > 0){
+		return val_;
+	}
+	return 0;
+}
+
+bool Sudoku::Space::notPos(int posVal){
+	if(1 <= posVal && posVal <= 9){
+		val_ += pow(2,(posVal-1));
+		return true;
+	}
+	return false;
+}
+
+bool Sudoku::Space::isPos(int posVal){
+	if(1 <= posVal && posVal <= 9){
+		short check = pow(2,(posVal-1));
+		if(check & val_){
+			return true;
+		}
+	}
+	return false;
+}
+

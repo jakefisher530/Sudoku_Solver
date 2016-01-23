@@ -14,6 +14,18 @@ public:
 	void print(std::ostream &out) const;
 	bool solve();	
 private:
+	class Space{
+	public:
+		Space();
+		~Space();
+		bool isSet();
+		bool setVal(short setVal);
+		short getVal();
+		bool notPos(int posVal);
+		bool isPos(int posVal);
+	private:
+		short val_;
+	};
 	int grid_[9][9];
 	int numEmpty_;
 	
