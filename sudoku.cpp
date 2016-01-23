@@ -12,16 +12,33 @@ Sudoku::Sudoku(){
 
 Sudoku::~Sudoku(){}
 
-void Sudoku::fileFill(){
-		
+bool Sudoku::fileFill(){
+	std::ifstream fin ("givens_medium.txt");
+	char rowC;
+	int rowI, column, given;
+	while (fin >> rowC >> column >> given){
+		rowI = quantifyRow(rowC);
+		if(rowI < 1 || rowI > 9)
+		{
+			std::cout << "Invalid row entry" << std::endl;
+			return false;
+		}
+		if (column < 1 || column > 9)
+		{
+			std::cout << "Invalid column entry" << std::endl;
+			return false;
+		}
+		grid_[rowI-1][column-1] = given;
+		numEmpty_--;
+	}
 }
 
 void Sudoku::print() const{
-	for (int i=0; i<9; i++){
-		for (int j=0; j<9; j++){
-			cout << grid_[i][j] << " ";
+	for (int i=0; i < 9; i++){
+		for (int j=0; j < 9; j++){
+			std::cout << grid_[i][j] << " ";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 

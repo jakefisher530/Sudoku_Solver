@@ -5,7 +5,7 @@ class Sudoku{
 public:
 	Sudoku();
 	~Sudoku();
-	void fileFill();
+	bool fileFill();
 	void print() const;
 	void solve();	
 private:
