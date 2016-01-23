@@ -1,18 +1,35 @@
+#include "sudoku.hpp"
 #include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <cstdlib>
-using namespace std;
 
-int quantifyRow (char rowC)
+
+Sudoku::Sudoku(){
+	numEmpty_ = 81;
+}
+
+Sudoku::~Sudoku(){}
+
+void Sudoku::fileFill(){	
+}
+
+void Sudoku::print() const{
+}
+
+void Sudoku::solve(){	
+}
+
+
+int Sudoku::quantifyRow(char rowC) const
 {
 	if (rowC < 90)
 		return rowC - 64;
 	return rowC - 96;
 }
 
-bool boxCheck (int grid[9][9], int & numEmpty)
+bool Sudoku::boxCheck()
 {
 	bool isNumAdded = false;
 	for (int startColumn = 0; startColumn <= 6; startColumn +=3)
@@ -31,12 +48,12 @@ bool boxCheck (int grid[9][9], int & numEmpty)
 				{
 					for (int currentColumn = startColumn; currentColumn < startColumn + 3; currentColumn++)
 					{
-						if (grid[currentRow][currentColumn] != 0)
+						if (grid_[currentRow][currentColumn] != 0)
 						{
 							possible [currentRow-startRow][currentColumn-startColumn] = false;
 							numPossible--;
 						}
-						if (grid[currentRow][currentColumn] == currentNum)
+						if (grid_[currentRow][currentColumn] == currentNum)
 							isFound = true;
 					}
 				}
@@ -47,12 +64,12 @@ bool boxCheck (int grid[9][9], int & numEmpty)
 					{
 						for (int scanColumn = 0; scanColumn < 9; scanColumn++)
 						{
-							if (grid[scanRow][scanColumn] == currentNum && cluesFound == 1)
+							if (grid_[scanRow][scanColumn] == currentNum && cluesFound == 1)
 							{
 								cluesFound++;
 								clueRow2 = scanRow - startRow;
 							}
-							if (grid[scanRow][scanColumn] == currentNum && cluesFound == 0)
+							if (grid_[scanRow][scanColumn] == currentNum && cluesFound == 0)
 							{
 								cluesFound++;
 								clueRow1 = scanRow - startRow;
@@ -81,12 +98,12 @@ bool boxCheck (int grid[9][9], int & numEmpty)
 					{
 						for (int scanRow = 0; scanRow < 9; scanRow++)
 						{
-							if (grid[scanRow][scanColumn] == currentNum && cluesFound == 1)
+							if (grid_[scanRow][scanColumn] == currentNum && cluesFound == 1)
 							{
 								cluesFound++;
 								clueColumn2 = scanColumn - startColumn;
 							}
-							if (grid[scanRow][scanColumn] == currentNum && cluesFound == 0)
+							if (grid_[scanRow][scanColumn] == currentNum && cluesFound == 0)
 							{
 								cluesFound++;
 								clueColumn1 = scanColumn - startColumn;
@@ -115,8 +132,8 @@ bool boxCheck (int grid[9][9], int & numEmpty)
 					for (int i=0; i<3; i++)
 						for (int j=0; j<3; j++)
 							if (possible [i][j])
-								grid [startRow + i][startColumn + j] = currentNum;
-					numEmpty--;
+								grid_[startRow + i][startColumn + j] = currentNum;
+					numEmpty_--;
 					isNumAdded = true;					
 				}
 			}
@@ -125,7 +142,7 @@ bool boxCheck (int grid[9][9], int & numEmpty)
 	return isNumAdded;
 }
 
-bool rowCheck (int grid[9][9], int & numEmpty)
+bool Sudoku::rowCheck()
 {
 	bool isNumAdded = false, isFound = false;
 	bool possible [9];
@@ -139,17 +156,17 @@ bool rowCheck (int grid[9][9], int & numEmpty)
 			int numPossible = 9;
 			for (int i=0; i<9; i++)
 			{
-				if (grid [row][i] != 0)
+				if (grid_[row][i] != 0)
 				{
 					possible [i] = false;
 					numPossible--;
 				}
-				if (grid [row][i] == currentNum)
+				if (grid_[row][i] == currentNum)
 					isFound = true;
 			}
 			for (int i=0; i<9; i++)
 				for (int j=0; j<9; j++)
-					if (grid [i][j] == currentNum)
+					if (grid_[i][j] == currentNum)
 					{
 						numPossible -= possible [j];
 						possible [j] = false;
@@ -158,21 +175,21 @@ bool rowCheck (int grid[9][9], int & numEmpty)
 			for (int rowCheck = startRow; rowCheck <= startRow + 2; rowCheck++)
 			{
 				for (int i=0; i<3; i++)
-					if (grid [rowCheck][i] == currentNum)
+					if (grid_[rowCheck][i] == currentNum)
 						for (int j=0; j<3; j++)
 						{
 							numPossible -= possible [j];
 							possible [j] = false;
 						}
 				for (int i=3; i<6; i++)
-					if (grid [rowCheck][i] == currentNum)
+					if (grid_[rowCheck][i] == currentNum)
 						for (int j=3; j<6; j++)
 						{
 							numPossible -= possible [j];
 							possible [j] = false;
 						}
 				for (int i=6; i<9; i++)
-					if (grid [rowCheck][i] == currentNum)
+					if (grid_[rowCheck][i] == currentNum)
 						for (int j=6; j<9; j++)
 						{
 							numPossible -= possible [j];
@@ -183,8 +200,8 @@ bool rowCheck (int grid[9][9], int & numEmpty)
 			{
 				for (int i=0; i<9; i++)
 					if (possible [i])
-						grid [row][i] = currentNum;
-				numEmpty--;
+						grid_[row][i] = currentNum;
+				numEmpty_--;
 				isNumAdded = true;
 			}
 		}
@@ -192,7 +209,7 @@ bool rowCheck (int grid[9][9], int & numEmpty)
 	return isNumAdded;
 }
 
-bool columnCheck (int grid[9][9], int & numEmpty)
+bool Sudoku::columnCheck()
 {
 	bool isNumAdded = false, isFound = false;
 	bool possible [9];
@@ -206,17 +223,17 @@ bool columnCheck (int grid[9][9], int & numEmpty)
 			int numPossible = 9;
 			for (int i=0; i<9; i++)
 			{
-				if (grid [i][column] != 0)
+				if (grid_[i][column] != 0)
 				{
 					possible [i] = false;
 					numPossible--;
 				}
-				if (grid [i][column] == currentNum)
+				if (grid_[i][column] == currentNum)
 					isFound = true;
 			}
 			for (int i=0; i<9; i++)
 				for (int j=0; j<9; j++)
-					if (grid [i][j] == currentNum)
+					if (grid_[i][j] == currentNum)
 					{
 						numPossible -= possible [i];
 						possible [i] = false;
@@ -225,21 +242,21 @@ bool columnCheck (int grid[9][9], int & numEmpty)
 			for (int columnCheck = startColumn; columnCheck <= startColumn + 2; columnCheck++)
 			{
 				for (int i=0; i<3; i++)
-					if (grid [i][columnCheck] == currentNum)
+					if (grid_[i][columnCheck] == currentNum)
 						for (int j=0; j<3; j++)
 						{
 							numPossible -= possible [j];
 							possible [j] = false;
 						}
 				for (int i=3; i<6; i++)
-					if (grid [i][columnCheck] == currentNum)
+					if (grid_[i][columnCheck] == currentNum)
 						for (int j=3; j<6; j++)
 						{
 							numPossible -= possible [j];
 							possible [j] = false;
 						}
 				for (int i=6; i<9; i++)
-					if (grid [i][columnCheck] == currentNum)
+					if (grid_[i][columnCheck] == currentNum)
 						for (int j=6; j<9; j++)
 						{
 							numPossible -= possible [j];
@@ -250,8 +267,8 @@ bool columnCheck (int grid[9][9], int & numEmpty)
 			{
 				for (int i=0; i<9; i++)
 					if (possible [i])
-						grid [i][column] = currentNum;
-				numEmpty--;
+						grid_[i][column] = currentNum;
+				numEmpty_--;
 				isNumAdded = true;
 			}
 		}
@@ -259,50 +276,50 @@ bool columnCheck (int grid[9][9], int & numEmpty)
 	return isNumAdded;
 }
 
-bool notCheck (int grid[9][9], int & numEmpty)
+bool Sudoku::notCheck()
 {
 	bool isNumAdded = false;
 	bool possible [9];
 	int numPossible = 9;
 	for (int row=0; row<9; row++)
 		for (int column=0; column<9; column++)
-			if (grid [row][column] == 0)
+			if (grid_[row][column] == 0)
 			{
 				for (int i=0; i<9; i++)
 					possible [i] = true;
 				numPossible = 9;
 				for (int rowScan=0; rowScan < 9; rowScan++)
-					if (grid [rowScan][column] != 0)
+					if (grid_[rowScan][column] != 0)
 					{
-						numPossible -= possible [grid [rowScan][column] - 1];
-						possible [grid [rowScan][column] - 1] =  false;
+						numPossible -= possible [grid_[rowScan][column] - 1];
+						possible [grid_[rowScan][column] - 1] =  false;
 					}
 				for (int columnScan=0; columnScan < 9; columnScan++)
-					if (grid [row][columnScan] != 0)
+					if (grid_[row][columnScan] != 0)
 					{
-						numPossible -= possible [grid [row][columnScan] - 1];
-						possible [grid [row][columnScan] - 1] = false;
+						numPossible -= possible [grid_[row][columnScan] - 1];
+						possible [grid_[row][columnScan] - 1] = false;
 					}
 				int rowStart =(row/3)*3, columnStart =(column/3)*3; 
 				for (int rowBox = rowStart; rowBox <= rowStart + 2; rowBox++)
 					for (int columnBox = columnStart; columnBox <= columnStart + 2; columnBox++)
-						if (grid [rowBox][columnBox] != 0)
+						if (grid_[rowBox][columnBox] != 0)
 						{
-							numPossible -= possible [grid [rowBox][columnBox] - 1];
-							possible [grid [rowBox][columnBox] - 1] = false;
+							numPossible -= possible [grid_[rowBox][columnBox] - 1];
+							possible [grid_[rowBox][columnBox] - 1] = false;
 						}
 				if (numPossible == 1)
 				{
 					for (int i=0; i<9; i++)
 						if (possible [i])
-							grid [row][column] = i + 1;
-					numEmpty--;
+							grid_[row][column] = i + 1;
+					numEmpty_--;
 					isNumAdded = true;							
 				}
 			}
 	return isNumAdded;
 }
-
+/*
 int main ()
 {
 	int grid[9][9];
@@ -342,3 +359,4 @@ int main ()
 	cout << endl << numEmpty << endl;
 	return EXIT_SUCCESS;
 }
+*/

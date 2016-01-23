@@ -3,8 +3,19 @@
 
 class Sudoku{
 public:
-		
+	Sudoku();
+	~Sudoku();
+	void fileFill();
+	void print() const;
+	void solve();	
 private:
-		
+	int grid_[9][9];
+	int numEmpty_;
+	
+	int quantifyRow (char rowC) const;
+	bool boxCheck ();
+	bool rowCheck ();
+	bool columnCheck ();
+	bool notCheck ();		
 };
 #endif
