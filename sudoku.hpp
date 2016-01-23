@@ -2,6 +2,8 @@
 #define SUDOKU_H
 
 #include <string>
+#include <fstream>
+#include <iostream>
 
 class Sudoku{
 public:
@@ -9,7 +11,7 @@ public:
 	Sudoku(std::string fileName);
 	~Sudoku();
 	bool fileFill(std::string fileName);
-	void print() const;
+	void print(std::ostream &out) const;
 	bool solve();	
 private:
 	int grid_[9][9];

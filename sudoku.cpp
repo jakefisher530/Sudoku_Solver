@@ -1,7 +1,5 @@
 #include "sudoku.hpp"
 #include <iomanip>
-#include <iostream>
-#include <fstream>
 #include <cmath>
 #include <cstdlib>
 
@@ -18,7 +16,7 @@ Sudoku::Sudoku(std::string fileName){
 Sudoku::~Sudoku(){}
 
 bool Sudoku::fileFill(std::string fileName){
-	std::ifstream fin (fileName.c_str());
+	std::ifstream fin(fileName.c_str());
 	if(!fin){
 		return false;
 	}
@@ -38,14 +36,14 @@ bool Sudoku::fileFill(std::string fileName){
 	return true;
 }
 
-void Sudoku::print() const{
+void Sudoku::print(std::ostream &out) const{
 	for (int i=0; i < 9; i++){
 		for (int j=0; j < 9; j++){
-			std::cout << grid_[i][j] << " ";
+			out << grid_[i][j] << " ";
 		}
-		std::cout << std::endl;
+		out << std::endl;
 	}
-	std::cout << std::endl;
+	out << std::endl;
 }
 
 bool Sudoku::solve(){

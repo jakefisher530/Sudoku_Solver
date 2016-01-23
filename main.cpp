@@ -1,6 +1,6 @@
 #include "sudoku.hpp"
 #include <cstdlib>
-#include <iostream>
+
 using namespace std;
 
 int main(){
@@ -9,13 +9,13 @@ int main(){
 	cin >> fileName;
 	cout << endl;
 	Sudoku s(fileName);
-	s.print();
+	s.print(cout);
 	if(s.solve()){
 		cout << "Solved! " << endl;
-		s.print();
+		s.print(cout);
 	} else{
 		cout << "Unable to solve " << endl;
-		s.print();
+		s.print(cout);
 	}
 	return EXIT_SUCCESS;
 }
