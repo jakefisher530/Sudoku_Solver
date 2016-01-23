@@ -12,10 +12,17 @@ Sudoku::Sudoku(){
 
 Sudoku::~Sudoku(){}
 
-void Sudoku::fileFill(){	
+void Sudoku::fileFill(){
+		
 }
 
 void Sudoku::print() const{
+	for (int i=0; i<9; i++){
+		for (int j=0; j<9; j++){
+			cout << grid_[i][j] << " ";
+		}
+		cout << endl;
+	}
 }
 
 void Sudoku::solve(){	
