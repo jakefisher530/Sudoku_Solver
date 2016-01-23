@@ -4,18 +4,18 @@
 using namespace std;
 
 int main(){
-	Sudoku s;
-	if(s.fileFill()){
+	cout << "Select file from which to read " << endl;
+	string fileName;
+	cin >> fileName;
+	cout << endl;
+	Sudoku s(fileName);
+	s.print();
+	if(s.solve()){
+		cout << "Solved! " << endl;
 		s.print();
-		if(s.solve()){
-			cout << "Solved! " << endl;
-			s.print();
-		} else{
-			cout << "Unable to solve " << endl;
-			s.print();
-		}
 	} else{
-		cout << "Unable to read " << endl;
+		cout << "Unable to solve " << endl;
+		s.print();
 	}
 	return EXIT_SUCCESS;
 }

@@ -7,35 +7,35 @@
 
 
 Sudoku::Sudoku(){
-	for(int i=0; i<9; i++){
-		for(int j=0; j<9; j++){
-			grid_[i][j] = 0;
-		}
-	}
-	numEmpty_ = 81;
+	fillEmpty();
+}
+
+Sudoku::Sudoku(std::string fileName){
+	fillEmpty();
+	this->fileFill(fileName);
 }
 
 Sudoku::~Sudoku(){}
 
-bool Sudoku::fileFill(){
-	std::ifstream fin ("givens_medium.txt");
+bool Sudoku::fileFill(std::string fileName){
+	std::ifstream fin (fileName.c_str());
+	if(!fin){
+		return false;
+	}
 	char rowC;
 	int rowI, column, given;
 	while (fin >> rowC >> column >> given){
 		rowI = quantifyRow(rowC);
-		if(rowI < 1 || rowI > 9)
-		{
-			std::cout << "Invalid row entry" << std::endl;
+		if(rowI < 1 || rowI > 9){
 			return false;
 		}
-		if (column < 1 || column > 9)
-		{
-			std::cout << "Invalid column entry" << std::endl;
+		if (column < 1 || column > 9){
 			return false;
 		}
 		grid_[rowI-1][column-1] = given;
 		numEmpty_--;
 	}
+	return true;
 }
 
 void Sudoku::print() const{
@@ -57,11 +57,19 @@ bool Sudoku::solve(){
 }
 
 
-int Sudoku::quantifyRow(char rowC) const
-{
+int Sudoku::quantifyRow(char rowC) const{
 	if (rowC < 90)
 		return rowC - 64;
 	return rowC - 96;
+}
+
+void Sudoku::fillEmpty(){
+	for(int i=0; i<9; i++){
+		for(int j=0; j<9; j++){
+			grid_[i][j] = 0;
+		}
+	}
+	numEmpty_ = 81;	
 }
 
 bool Sudoku::boxCheck()
