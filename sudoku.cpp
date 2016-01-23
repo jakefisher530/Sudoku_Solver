@@ -348,44 +348,4 @@ bool Sudoku::notCheck()
 			}
 	return isNumAdded;
 }
-/*
-int main ()
-{
-	int grid[9][9];
-	for (int i=0; i < 9; i++)
-		for (int j=0; j < 9; j++)
-			grid[i][j] = 0;
-	ifstream fin ("givens_medium.txt");
-	char rowC;
-	int rowI, column, given, numEmpty = 81;
-	while (fin >> rowC >> column >> given)
-	{
-		rowI = quantifyRow (rowC);
-		if (rowI < 1 || rowI > 9)
-		{
-			cout << "Invalid row entry" << endl;
-			return EXIT_FAILURE;
-		}
-		if (column < 1 || column > 9)
-		{
-			cout << "Invalid column entry" << endl;
-			return EXIT_FAILURE;
-		}
-		grid[rowI-1][column-1] = given;
-		numEmpty--;
-	}
-	bool isNumAdded = true;
-	while (isNumAdded)
-	{
-		isNumAdded = boxCheck (grid, numEmpty) || rowCheck (grid, numEmpty) || columnCheck (grid, numEmpty) || notCheck (grid, numEmpty);
-	}
-	for (int i=0; i < 9; i++)
-	{
-		for (int j=0; j < 9; j++)
-			 cout << grid[i][j] << " ";
-		cout << endl;
-	}
-	cout << endl << numEmpty << endl;
-	return EXIT_SUCCESS;
-}
-*/
+
