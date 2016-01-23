@@ -7,7 +7,7 @@ public:
 	~Sudoku();
 	bool fileFill();
 	void print() const;
-	void solve();	
+	bool solve();	
 private:
 	int grid_[9][9];
 	int numEmpty_;

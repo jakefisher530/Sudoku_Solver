@@ -42,7 +42,12 @@ void Sudoku::print() const{
 	}
 }
 
-void Sudoku::solve(){	
+bool Sudoku::solve(){
+	bool isNumAdded = true;
+	while (isNumAdded){
+		isNumAdded = boxCheck() || rowCheck() || columnCheck() || notCheck();
+	}
+	return (numEmpty_ == 0);		
 }
 
 
