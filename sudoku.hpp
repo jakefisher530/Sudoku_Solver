@@ -18,17 +18,18 @@ private:
 	public:
 		Space();
 		~Space();
-		bool isSet();
+		bool isSet() const;
 		bool setVal(short setVal);
-		short getVal();
-		bool notPos(int posVal);
-		bool isPos(int posVal);
+		short getVal() const;
+		bool notPos(short posVal);
+		bool isPos(short posVal) const;
 	private:
 		short val_;
 	};
-	int grid_[9][9];
+	Space grid_[9][9];
 	int numEmpty_;
 	
+	bool addNum(short newNum, short rowIdx, short colIdx);
 	int quantifyRow(char rowC) const;
 	void fillEmpty();
 	bool boxCheck();
