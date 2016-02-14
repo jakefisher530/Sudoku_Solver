@@ -48,6 +48,7 @@ void Sudoku::print(std::ostream &out) const{
 
 bool Sudoku::solve(){
 	bool isNumAdded = true;
+	int i = 1;
 	while (isNumAdded){
 		isNumAdded = boxCheck() || rowCheck() || columnCheck() || notCheck();
 	}
@@ -60,8 +61,8 @@ bool Sudoku::addNum(short newNum, short rowIdx, short colIdx){
 			grid_[rowIdx][i].notPos(newNum);
 			grid_[i][colIdx].notPos(newNum);
 		}
-		for(int i=rowIdx/3; i<((rowIdx/3)+3); i++){
-			for(int j=colIdx/3; j<((colIdx+3)+3); j++){
+		for(int i=(rowIdx/3); i<((rowIdx/3)+3); i++){
+			for(int j=(colIdx/3); j<((colIdx/3)+3); j++){
 				grid_[i][j].notPos(newNum);
 			}
 		}
@@ -86,15 +87,37 @@ void Sudoku::fillEmpty(){
 }
 
 bool Sudoku::boxCheck(){
+	return false;
 }
 
 bool Sudoku::rowCheck(){
+	return false;
 }
 
 bool Sudoku::columnCheck(){
+	return false;
 }
 
 bool Sudoku::notCheck(){
+	bool isNumAdded = false;
+	short totPos = 0, numPos = 0; 
+	for(int i=0; i<9; i++){
+		for(int j=0; j<9; j++){
+			for(short num=1; num<=9; num++){
+				if(grid_[i][j].isPos(num)){
+					totPos++;
+					numPos = num;
+				}
+			}
+			if(totPos == 1){
+				addNum(numPos, i, j);
+				isNumAdded = true;
+			}
+			totPos = 0;
+			numPos = 0;
+		}
+	}
+	return isNumAdded;
 }
 
 Sudoku::Space::Space(){
@@ -123,7 +146,7 @@ short Sudoku::Space::getVal() const{
 }
 
 bool Sudoku::Space::notPos(short posVal){
-	if(1 <= posVal && posVal <= 9 && val_ < 0){
+	if(1 <= posVal && posVal <= 9 && val_ <= 0){
 		val_ += pow(2,(posVal-1));
 		return true;
 	}
@@ -133,7 +156,7 @@ bool Sudoku::Space::notPos(short posVal){
 bool Sudoku::Space::isPos(short posVal) const{
 	if(1 <= posVal && posVal <= 9){
 		short check = pow(2,(posVal-1));
-		if(check & val_){
+		if(!(check & val_)){
 			return true;
 		}
 	}

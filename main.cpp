@@ -10,12 +10,12 @@ int main(){
 	cout << endl;
 	Sudoku s(fileName);
 	s.print(cout);
-	/*if(s.solve()){
+	if(s.solve()){
 		cout << "Solved! " << endl;
 		s.print(cout);
 	} else{
 		cout << "Unable to solve " << endl;
 		s.print(cout);
-	}*/
+	}
 	return EXIT_SUCCESS;
 }
