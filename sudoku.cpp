@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstdlib>
 
-
 Sudoku::Sudoku(){
 	fillEmpty();
 }
@@ -31,7 +30,6 @@ bool Sudoku::fileFill(std::string fileName){
 			return false;
 		}
 		addNum(given, rowI-1, column-1);
-		numEmpty_--;
 	}
 	return true;
 }
@@ -48,7 +46,6 @@ void Sudoku::print(std::ostream &out) const{
 
 bool Sudoku::solve(){
 	bool isNumAdded = true;
-	int i = 1;
 	while (isNumAdded){
 		isNumAdded = boxCheck() || rowCheck() || columnCheck() || notCheck();
 	}
@@ -59,13 +56,14 @@ bool Sudoku::addNum(short newNum, short rowIdx, short colIdx){
 	if(grid_[rowIdx][colIdx].setVal(newNum)){
 		for(int i=0; i<9; i++){
 			grid_[rowIdx][i].notPos(newNum);
-			grid_[i][colIdx].notPos(newNum);
+			grid_[i][colIdx].notPos(newNum);		
 		}
-		for(int i=(rowIdx/3); i<((rowIdx/3)+3); i++){
-			for(int j=(colIdx/3); j<((colIdx/3)+3); j++){
-				grid_[i][j].notPos(newNum);
+		for(int i=((rowIdx/3)*3); i<(((rowIdx/3)*3)+3); i++){
+			for(int j=((colIdx/3)*3); j<(((colIdx/3)*3)+3); j++){
+				grid_[i][j].notPos(newNum);			
 			}
 		}
+		numEmpty_--;
 		return true;
 	}
 	return false;
@@ -87,15 +85,78 @@ void Sudoku::fillEmpty(){
 }
 
 bool Sudoku::boxCheck(){
-	return false;
+	bool isNumAdded = false;
+	short totPos = 0, numPos = 0, rowIdx = 0, colIdx = 0; 	
+	for(int i=0; i<=6; i+=3){
+		for(int j=0; j<=6; j+=3){
+			for(int num=1; num<=9; num++){
+				for(int r=i; r<i+3; r++){
+					for(int c=j; c<j+3; c++){
+						if(grid_[r][c].isPos(num)){
+							totPos++;
+							numPos = num;
+							rowIdx = r;
+							colIdx = c;
+						}
+					}
+				}
+				if(totPos == 1){
+					isNumAdded = addNum(numPos, rowIdx, colIdx);
+				}
+				totPos = 0;
+				numPos = 0;
+				rowIdx = 0;	
+				colIdx = 0;
+			}
+		}
+	}
+	return isNumAdded;
 }
 
 bool Sudoku::rowCheck(){
-	return false;
+	bool isNumAdded = false;
+	short totPos = 0, numPos = 0, posIdx = 0; 	
+	for(int i=0; i<9; i++){
+			for(int num=1; num<=9; num++){
+				for(int j=0; j<9; j++){
+					if(grid_[i][j].isPos(num)){
+						totPos++;
+						numPos = num;
+						posIdx = j;
+					}
+				}
+				if(totPos == 1){
+					isNumAdded = addNum(numPos, i, posIdx);
+				}
+				totPos = 0;
+				numPos = 0;
+				posIdx = 0;				
+			}
+	}
+	return isNumAdded;
 }
 
 bool Sudoku::columnCheck(){
-	return false;
+	bool isNumAdded = false;
+	short totPos = 0, numPos = 0, posIdx = 0; 	
+	for(int j=0; j<9; j++){
+			for(int num=1; num<=9; num++){
+				for(int i=0; i<9; i++){
+					if(grid_[i][j].isPos(num)){
+						totPos++;
+						numPos = num;
+						posIdx = i;
+					}
+				}
+				if(totPos == 1){
+					isNumAdded = addNum(numPos, posIdx, j);
+				}
+				totPos = 0;
+				numPos = 0;
+				posIdx = 0;				
+			}
+	}
+	return isNumAdded;
 }
 
 bool Sudoku::notCheck(){
@@ -110,8 +171,7 @@ bool Sudoku::notCheck(){
 				}
 			}
 			if(totPos == 1){
-				addNum(numPos, i, j);
-				isNumAdded = true;
+				isNumAdded = addNum(numPos, i, j);
 			}
 			totPos = 0;
 			numPos = 0;
@@ -147,14 +207,16 @@ short Sudoku::Space::getVal() const{
 
 bool Sudoku::Space::notPos(short posVal){
 	if(1 <= posVal && posVal <= 9 && val_ <= 0){
-		val_ += pow(2,(posVal-1));
+		if(this->Space::isPos(posVal)){
+			val_ += pow(2,(posVal-1));			
+		}
 		return true;
 	}
 	return false;
 }
 
 bool Sudoku::Space::isPos(short posVal) const{
-	if(1 <= posVal && posVal <= 9){
+	if(1 <= posVal && posVal <= 9 && val_ <= 0){
 		short check = pow(2,(posVal-1));
 		if(!(check & val_)){
 			return true;
